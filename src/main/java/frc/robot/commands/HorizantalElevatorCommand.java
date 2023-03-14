@@ -18,7 +18,7 @@ public HorizantalElevatorCommand(HorizontalElevator HorizontalElevator, Joystick
 
 @Override
 public void execute(){
-    double horizontalElevator = HorizontalElevatorController.getRawAxis(3);
-    HorizontalElevator.elevatorUp(horizontalElevator);
+    //double horizontalElevator = HorizontalElevatorController.getRawAxis(3);
+    //HorizontalElevator.elevatorUp(horizontalElevator);
 }
 }

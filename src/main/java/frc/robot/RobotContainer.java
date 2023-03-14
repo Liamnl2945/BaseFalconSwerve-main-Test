@@ -40,17 +40,17 @@ public class RobotContainer {
     private final JoystickButton elevatorLvl3 = new JoystickButton(manipulator, XboxController.Button.kX.value);
     private final Swerve s_Swerve = new Swerve();
     private final Intake i_Intake = new Intake();
-    private final Elevator e_Elevator = new Elevator();
+  //  private final Elevator e_Elevator = new Elevator();
     private final Wrist w_Wrist = new Wrist();
-    private final HorizontalElevator h_Elevator = new HorizontalElevator();
+   // private final HorizontalElevator h_Elevator = new HorizontalElevator();
     /*Manipulator Controls */
-    private final int elevatorMain = XboxController.Axis.kLeftY.value;
+    //private final int elevatorMain = XboxController.Axis.kLeftY.value;
    
 
     /*robot subsystems */
-    private final ElevatorCommand elevatorCommand = new ElevatorCommand(e_Elevator, manipulator);
+   // private final ElevatorCommand elevatorCommand = new ElevatorCommand(e_Elevator, h_Elevator, manipulator, manipulator);
     private final WristCommand wristCommand = new WristCommand(w_Wrist, manipulator);
-    private final HorizantalElevatorCommand horizantalElevatorCommand = new HorizantalElevatorCommand(h_Elevator, manipulator);
+    //private final HorizantalElevatorCommand horizantalElevatorCommand = new HorizantalElevatorCommand(h_Elevator, manipulator);
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         s_Swerve.setDefaultCommand(
@@ -88,9 +88,9 @@ public class RobotContainer {
         intakeOut.onFalse(new InstantCommand(() -> i_Intake.stopIntake()));
     }
     private void configureDefaultCommands(){
-        e_Elevator.setDefaultCommand(elevatorCommand);
+       // e_Elevator.setDefaultCommand(elevatorCommand);
         w_Wrist.setDefaultCommand(wristCommand);
-        h_Elevator.setDefaultCommand(horizantalElevatorCommand);
+      //  h_Elevator.setDefaultCommand(elevatorCommand);
     }
 
     /**
@@ -98,8 +98,10 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-   // public Command getAutonomousCommand() {
+ public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-      //  return new exampleAuto(s_Swerve);
-   // }
+        return new Red_Balance(s_Swerve);
+
+      }
+
 }

@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 public class Elevator extends SubsystemBase{
-    public WPI_TalonFX elevatorMain = new WPI_TalonFX(Constants.Elevator.elevatorMotor);
+  /* */  public WPI_TalonFX elevatorMain = new WPI_TalonFX(Constants.Elevator.elevatorMotor);
     private DigitalInput level_0;
     private DigitalInput level_1;
     private DigitalInput level_2;
     int state = 1;
-    
+    double autospeed = 0;
 
     public Elevator(){
         elevatorMain.configFactoryDefault();
@@ -24,72 +24,66 @@ public class Elevator extends SubsystemBase{
         level_0 = new DigitalInput(0);
         level_1 = new DigitalInput(1);
         level_2 = new DigitalInput(2);
-    }
-    public void elevatorLevelOne() {
-        //elevatorMain.set(speed);
-        if(state != 1 && level_0.get() == false ){
-            elevatorDown(.1);
-        }
-        else{
-            elevatorStop();
-            state = 1;
-            System.out.println("Elevator is level ONE");
-        }        
-    }
-    public void elevatorLevelTwo(){
-        if(state == 1 && level_1.get() == true){
-            elevatorUp(.1);
-        }
-        else if(state == 3 && level_1.get() == true){
-            elevatorDown(.1);
-        }
-        else{
-            elevatorStop();
-            state = 2;
-            System.out.println("Elveator is level 2");
-        }
-        
-    }
-    public void elevatorLevelThree(){
-        if(state != 3 && level_2.get()  == true){
-            elevatorUp(.1);
-        }
-        else{
-            elevatorStop();
-            state = 3;
-            System.out.println("elevator levl 3");
-        }
+        autospeed = 0;
+        state = 1;
+
     }
     public void elevatorStop(){
         elevatorMain.set(0);
+        autospeed = 0;
     }
     public void elevatorUp(double speed){
         //elevatorMain.set(speed);
-        System.err.println("*******************" + level_2.get());
+        //System.err.println("*******************" + level_2.get()+ "speed " + speed + " autospeed " + autospeed + " state " + state);
+        if(autospeed != 0){
+            speed = autospeed;
+        }
         if(level_2.get()  == false){ 
             elevatorStop();
             state = 3;
-            return;
+            
+        }
+        if(level_1.get() == false){
+            elevatorStop();
+            state = 2;
         }
         else if(level_0.get()  == false){ 
             elevatorStop();
             state = 1;
-            return;
+            
         }
         if(state != 1 && speed<0){
             elevatorMain.set(speed);
+            state = 4;
     
         }
          else if(state !=3 && speed>0){
             elevatorMain.set(speed);
+            state = 5;
         }
+        
         else{
-           elevatorMain.set(speed);
+           elevatorMain.set(0);
         }
     
     }
     public void elevatorDown(double speed){
         elevatorMain.set(-speed);
+    }
+    public void elevatorTop(){
+        autospeed = .95;
+        
+    }
+    public void elevatorBot(){
+        autospeed = -.95;
+    }
+    public void elevatorMid(){
+    if(state == 3){
+        autospeed = -.95;
+    } 
+    if(state == 1){
+        autospeed =.95;
+    } 
     }
     
     
