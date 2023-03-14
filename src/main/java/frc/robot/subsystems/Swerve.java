@@ -3,19 +3,24 @@ package frc.robot.subsystems;
 import frc.robot.SwerveModule;
 import frc.robot.Constants;
 
+
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
@@ -43,21 +48,13 @@ public class Swerve extends SubsystemBase {
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
     }
+   // Assuming this method is part of a drivetrain subsystem that provides the necessary methods
 
-    public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
+    public void drive(Translation2d translation, double rotation, boolean fieldRelative,boolean halfSpeed, boolean isOpenLoop) {
         SwerveModuleState[] swerveModuleStates =
-            Constants.Swerve.swerveKinematics.toSwerveModuleStates(
-                fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                                    translation.getX(), 
-                                    translation.getY(), 
-                                    rotation, 
-                                    getYaw()
-                                )
-                                : new ChassisSpeeds(
-                                    translation.getX(), 
-                                    translation.getY(), 
-                                    rotation)
-                                );
+            Constants.Swerve.swerveKinematics.toSwerveModuleStates(getButton(translation, rotation, fieldRelative, halfSpeed));
+
+               
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
 
         for(SwerveModule mod : mSwerveMods){
@@ -101,6 +98,22 @@ public class Swerve extends SubsystemBase {
     public void zeroGyro(){
         gyro.setYaw(0);
     }
+    public void speedThrottle(boolean  hiLow){
+        if(hiLow == true){
+            Constants.Swerve.maxSpeed = Constants.Swerve.maxSpeed/2;
+            System.out.println("Max Speed; " + Constants.Swerve.maxSpeed); 
+            Constants.Swerve.maxAngularVelocity = Constants.Swerve.maxAngularVelocity/2;
+            System.out.println("Max Spin;" + Constants.Swerve.maxAngularVelocity);
+            
+        }
+        else{
+            Constants.Swerve.maxSpeed = Constants.Swerve.maxSpeed*2;
+            Constants.Swerve.maxAngularVelocity = Constants.Swerve.maxAngularVelocity*2; 
+            System.out.println("Max Speed; " + Constants.Swerve.maxSpeed);
+            System.out.println("Max Spin;" + Constants.Swerve.maxAngularVelocity);    
+        }
+        
+    }
 
     public Rotation2d getYaw() {
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
@@ -110,6 +123,42 @@ public class Swerve extends SubsystemBase {
         for(SwerveModule mod : mSwerveMods){
             mod.resetToAbsolute();
         }
+    }
+
+    public ChassisSpeeds getButton(Translation2d translation, double rotation, boolean fieldRelative,boolean halfSpeed){
+        if(fieldRelative && halfSpeed){
+           return ChassisSpeeds.fromFieldRelativeSpeeds(
+                (translation.getX()/3), 
+                (translation.getY()/3),
+                (rotation/3), 
+                getYaw()
+                );
+        }
+    else if(!fieldRelative && halfSpeed){
+            return new ChassisSpeeds(
+                (translation.getX()/3), 
+                (translation.getY()/3),
+                (rotation/3)
+            );
+        }
+    else if(fieldRelative && !halfSpeed){
+        return ChassisSpeeds.fromFieldRelativeSpeeds(
+                        translation.getX(), 
+                        translation.getY(), 
+                        rotation, 
+                        getYaw()
+                    );
+        }
+    else{
+        return new ChassisSpeeds(
+                        translation.getX(), 
+                        translation.getY(), 
+                        rotation);
+        }
+    }
+
+    public void balanceLogic(){
+
     }
 
     @Override
