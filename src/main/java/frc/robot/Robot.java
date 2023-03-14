@@ -6,9 +6,12 @@ package frc.robot;
 
 import org.photonvision.PhotonCamera;
 
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -19,22 +22,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
-  // Constants such as camera and target height stored. Change per robot and goal!
-  final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
-  final double TARGET_HEIGHT_METERS = Units.feetToMeters(5);
-  // Angle between horizontal and the camera.
-  final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
-
-  // How far from the target we want to be
-  final double GOAL_RANGE_METERS = Units.feetToMeters(3);
-
-  // Change this to match the name of your camera
-  PhotonCamera camera = new PhotonCamera("photonvision");
-
-   // PID constants should be tuned per robot
-   final double LINEAR_P = 0.1;
-   final double LINEAR_D = 0.0;
-   PIDController forwardController = new PIDController(LINEAR_P, 0, LINEAR_D);
+ 
    
   public static CTREConfigs ctreConfigs;
 
@@ -80,7 +68,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+   // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {

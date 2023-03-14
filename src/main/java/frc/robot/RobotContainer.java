@@ -35,6 +35,9 @@ public class RobotContainer {
     /*Manipulator Buttons */
     public final JoystickButton intakeIn = new JoystickButton(manipulator, XboxController.Button.kRightBumper.value);
     private final JoystickButton intakeOut = new JoystickButton(manipulator, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton elevatorLvl1 = new JoystickButton(manipulator, XboxController.Button.kA.value);
+    private final JoystickButton elevatorLvl2 = new JoystickButton(manipulator, XboxController.Button.kB.value);
+    private final JoystickButton elevatorLvl3 = new JoystickButton(manipulator, XboxController.Button.kX.value);
     private final Swerve s_Swerve = new Swerve();
     private final Intake i_Intake = new Intake();
     private final Elevator e_Elevator = new Elevator();
@@ -42,6 +45,7 @@ public class RobotContainer {
     private final HorizontalElevator h_Elevator = new HorizontalElevator();
     /*Manipulator Controls */
     private final int elevatorMain = XboxController.Axis.kLeftY.value;
+   
 
     /*robot subsystems */
     private final ElevatorCommand elevatorCommand = new ElevatorCommand(e_Elevator, manipulator);
@@ -94,8 +98,8 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-    public Command getAutonomousCommand() {
+   // public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return new exampleAuto(s_Swerve);
-    }
+      //  return new exampleAuto(s_Swerve);
+   // }
 }

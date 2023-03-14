@@ -20,7 +20,7 @@ public WristCommand(Wrist wrist, Joystick WristController){
 
 @Override
 public void execute(){
-    double wrist = WristController.getRawAxis(0);
+    double wrist = -WristController.getRawAxis(0);
     Wrist.wristUp(wrist);
 }
 }
