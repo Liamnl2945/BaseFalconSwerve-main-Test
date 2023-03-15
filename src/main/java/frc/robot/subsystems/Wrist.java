@@ -4,20 +4,30 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Wrist extends SubsystemBase {
 
-    public WPI_TalonFX wristMotor = new WPI_TalonFX(Constants.Wrist.Wrist);
+
+public class Wrist extends SubsystemBase {
+    private final WPI_TalonFX WristTop = new WPI_TalonFX(Constants.Wrist.WristTop);  
+    private final WPI_TalonFX WristBot = new WPI_TalonFX(Constants.Wrist.WristBot);
+    MotorControllerGroup wristMain = new MotorControllerGroup(WristBot, WristTop); 
+    private final DifferentialDrive Wrist = new DifferentialDrive(WristTop,WristBot);
     private DigitalInput level_3;
     private DigitalInput level_4;
     int state = 1;
     double autospeed = 0;
 
     public Wrist(){
-        wristMotor.configFactoryDefault();
-        wristMotor.setNeutralMode(NeutralMode.Brake);
+        WristTop.configFactoryDefault();
+        WristBot.configFactoryDefault();
+        WristTop.setNeutralMode(NeutralMode.Brake);
+        WristBot.setNeutralMode(NeutralMode.Brake);
+        WristTop.setInverted(true);
+        WristBot.setInverted(true);
         level_3 = new DigitalInput(3);
         level_4 = new DigitalInput(4);
         autospeed = 0;
@@ -30,11 +40,11 @@ public class Wrist extends SubsystemBase {
         return autospeed;
     }
     public void wristStop(){
-        wristMotor.set(0);
+        wristMain.set(0);
         autospeed = 0;
     } 
     public void wristUp(double POV){
-        //System.err.println("******************* level 3" + level_3.get()+ "\n********************** level 4"+level_4.get()+"POV " + POV +  " autospeed " + autospeed + " state " + state);
+        System.err.println("******************* level 3" + level_3.get()+ "\n********************** level 4"+level_4.get()+"POV " + POV +  " autospeed " + autospeed + " state " + state);
         double speed = 0;
         if(POV == -180){
             speed = -.95;
@@ -59,24 +69,26 @@ public class Wrist extends SubsystemBase {
             
         }
         if(state != 1 && speed<0){
-            wristMotor.set(speed);
+            wristMain.set(speed);
             state = 4;
     
         }
          else if(state !=2 && speed>0){
-            wristMotor.set(speed);
+            wristMain.set(speed);
             state = 5;
         }
         else{
-            wristMotor.set(0);
+            wristMain
+            
+            .set(0);
         }
     }
-    public void wristTop(){
-        autospeed = .95;
+    public void wristUp(){
+        autospeed = .2;
     }
 
     public void wristDown(){
-      autospeed = -.95; 
+      autospeed = -.2; 
     }
 
 }
