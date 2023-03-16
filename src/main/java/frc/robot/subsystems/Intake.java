@@ -31,8 +31,8 @@ public void runIntake() {
 }
 
 public void reverseIntake() {
-    intakeLeft.set(-speed);
-    intakeRight.set(-speed);
+    intakeLeft.set(-speed*2);
+    intakeRight.set(-speed*2);
 }
 
 public void stopIntake(){
