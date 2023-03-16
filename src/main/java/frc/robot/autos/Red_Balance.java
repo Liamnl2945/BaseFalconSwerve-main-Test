@@ -1,6 +1,7 @@
 package frc.robot.autos;
 
 import frc.robot.Constants;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.Intake;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Wrist;
@@ -19,9 +20,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 public class Red_Balance extends SequentialCommandGroup {
@@ -64,10 +67,10 @@ public class Red_Balance extends SequentialCommandGroup {
     
 
         addCommands(
-            new InstantCommand(()-> i_Intake.reverseIntake()),
-            new InstantCommand(() -> w_Wrist.wristDown()),
+            new InstantCommand(() -> w_Wrist.wristDown()).withTimeout(AutoConstants.deployTime).andThen(() -> i_Intake.reverseIntake()),
             new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
             swerveControllerCommand
+
             
         );
     }
