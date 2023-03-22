@@ -158,8 +158,8 @@ public final class Constants {
     }
     
     public final class Wrist{
-        public static final int WristTop = 12;
-        public static final int WristBot = 13;
+        public static final int WristMain = 12;
+       
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
