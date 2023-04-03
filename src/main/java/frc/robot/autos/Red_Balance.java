@@ -67,13 +67,15 @@ public class Red_Balance extends SequentialCommandGroup {
     
 
         addCommands(
-            new InstantCommand(() -> w_Wrist.wristDown()).andThen(() -> w_Wrist.wristUp(-180)).andThen(() -> i_Intake.reverseIntake()).withTimeout(3).andThen(()-> i_Intake.stopIntake()),
-            new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())) ,
-           swerveControllerCommand 
+            new InstantCommand(()-> i_Intake.slowReverseIntake()),
+            //new InstantCommand(() -> w_Wrist.wristDown()).andThen(() -> w_Wrist.wristUp(-180)).andThen(() -> i_Intake.reverseIntake()).withTimeout(3).andThen(()-> i_Intake.stopIntake()),
+            new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
+           swerveControllerCommand
 
             
         );
     }
+    
 
 
     
